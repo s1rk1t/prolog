@@ -1,0 +1,134 @@
+% Chris Aggeles
+% Farmer Problem (iterative permutations)
+
+
+:-go
+
+%define go
+
+go:-
+
+path(deltaEW(A, B, C, D), deltaEW(W, X, Y, Z)).
+
+%define path
+
+path(deltaEW(FaIn, FoIn, GoIn, GrIn),  deltaEW(FaOut, FoOut, GoOut, GrOut)):-
+move(deltaEW(FaIn, FoIn, GoIn, GrIn), deltaEW(FaOut, FoOut, GoOut, GrOut)),
+fail.
+
+%define moves
+
+%if just the farmer moves, this happens:
+
+move(deltaEW(X, Fo, Go, Gr), deltaEW(Y, Fo, Go, Gr)):-
+/+ wrongMove(deltaEW(X, Fo, Go, Gr), deltaEW(Y, Fo, Go, Gr)),
+/+ beenThere(deltaEW(Y, Fo, Go, Gr)),
+bankToBank(X, Y),
+assertz(deltaEW(Y, Fo, Go, Gr)).
+
+%farmer and fox move:
+
+move(deltaEW(X, X, Go, Gr), deltaEW(Y, Y, Go, Gr)):-
+/+ wrongMove(deltaEW(X, X, Go, Gr), deltaEW(Y, Y, Go, Gr)),
+/+ beenThere(deltaEW(Y, Y, Go, Gr)),
+bankToBank(X, Y),
+assertz(deltaEW(Y, Y, Go, Gr)).
+
+%farmer and goose move:
+
+move(deltaEW(X, Fo, X, Gr), deltaEW(Y, Fo, Y, Gr)):-
+/+ wrongMove(deltaEW(X, Fo, X, Gr), deltaEW(Y, Fo, Y, Gr)),
+/+ beenThere(deltaEW(Y, Fo, Y, Gr)),
+bankToBank(X, Y),
+assertz(deltaEW(Y, Fo, Y, Gr)).
+
+%farmer and grain move:
+
+move(deltaEW(X, Fo, Go, X), deltaEW(Y, Fo, Go, Y)):-
+/+ wrongMove(deltaEW(X, Fo, Go, X), deltaEW(Y, Fo, Go, Y)),
+/+ beenThere(deltaEW(Y, Fo, Go, Y)),
+bankToBank(X, Y),
+assertz(deltaEW(Y, Fo, Go, Y)).
+
+%nobody move!
+
+move(deltaEW(Fa, Fo, Go, Gr), deltaEW(Fa1, Fo1, Go1, Gr1)):-
+wrongMove(deltaEW(Fa, Go, Go, Gr), deltaEW(Fa1, Fo1, Go1, Gr1),
+beenThere(deltaEW(Fa1, Fo1, Go1, Gr1)),
+/+ isSame(Fa, Fo, Go, Gr, Fa1, Fo1, Go, Gr1),
+fail.
+
+move(deltaEW(Fa, Fo, Go, Gr), deltaEW(Fa1, Fo1, Go1, Gr1)):-
+wrongMove(deltaEW(Fa, Go, Go, Gr), deltaEW(Fa1, Fo1, Go1, Gr1),
+beenThere(deltaEW(Fa1, Fo1, Go1, Gr1)),
+isSame(Fa, Fo, Go, Gr, Fa1, Fo1, Go, Gr1),
+fail.
+
+% winning move?
+
+move(deltaEW(east, east, east, east), deltaEW(_, _, _, _)):-
+print_data,
+write('All done! Thanks for playing!').
+
+% think you're smart? prove it!
+
+print_data:-
+write('Farm, Fox,  Goos, Grain'),
+nl,	 
+write(deltaEW(A, B, C, D)),
+fail.
+
+
+%I think this is really the heart of the logic. This is what instantiates the Y with 'west'.
+
+bankToBank('east', 'west').
+bankToBank('west', 'east').
+
+%prevents the logical step of just moving everyone at once, or no one at all
+
+isSame('west', 'west', 'west', 'west', 'west', 'west', 'west', 'west').
+isSame('west', 'west', 'west', 'west', 'east', 'east', 'east', 'east').
+
+
+%this next part prevents logical errors
+
+wrongMove(deltaEW(X, Fo, Go, Gr), deltaEW(Y, Fo, Go, Gr)):-
+Fo == 'west',
+Go == 'west',
+Y == 'east'.
+
+wrongMove(deltaEW(X, Fo, Go, Gr), deltaEW(Y, Fo, Go, Gr)):-
+Fo == 'east',
+Go == 'east',
+Y == 'west'.
+
+wrongMove(deltaEW(X, X, Go, Gr), deltaEW(Y, Y, Go, Gr))):-
+Go == 'west',
+Gr == 'west',
+Y == 'east'.
+
+wrongMove(deltaEW(X, X, Go, Gr), deltaEW(Y, Y, Go, Gr)):-
+Go == 'east',
+Gr == 'east',
+Y == 'west'.
+
+wrongMove(deltaEW(X, Fo, Go, X), deltaEW(Y, Fo, Go, Y)):-
+Fo == 'west',
+Go == 'west',
+Y == 'east'.
+
+wrongMove(deltaEW(X, Fo, Go, X), deltaEW(Y, Fo, Go, Y)):-
+Fo == 'east',
+Go == 'east',
+Y == 'west'.
+
+% memory function
+
+beenThere(deltaEW(A, B, C, D):-
+deltaEW(A, B, C, D),
+fail.
+
+
+%let's get this party started!
+
+deltaEW('west', 'west', 'west', 'west').

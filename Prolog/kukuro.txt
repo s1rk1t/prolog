@@ -1,0 +1,24 @@
+compute(Sum, [X,Y,Z]):-
+X \== Y,
+constraint(X, Y, Z),
+Sum is X + Y + Tail.
+
+
+constraint(X, Y, Z):-
+X >= 1, 
+X =< 9,
+Y >= 1,
+Y =< 9.
+Z >= 1,
+Z =< 9.
+
+constraint(X, Y):-
+X >= 1, 
+X =< 9,
+Y >= 1,
+Y =< 9.
+
+
+:-go
+
+compute(10, X, Y, Z).

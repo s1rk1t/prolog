@@ -1,0 +1,67 @@
+%intersect
+
+
+
+intersect([],[],List, List).
+
+intersect([Head1|Tail1], [Head2|Tail2],IntermediateList, Intersection):-
+Head1 == Head2,
+append(IntermediateList, Head1, TempList),
+intersect(Tail1, Tail2, TempList, Intersection).
+
+intersect([Head1|Tail1],[Head2|Tail2], IntermediateList, Intersection):-
+Head1 \== Head2,
+intersect([Head1|Tail1], Tail2, IntermediateList, Intersection).
+
+
+
+
+
+
+int(X),
+[X|TempList]
+
+
+process([Head|Tail], List2, 
+member(Head, List2),
+append(Head, TempList, Result),
+
+
+
+
+
+intersect([Element|Tail1],List2) :-
+%intersect(List1, List2):-
+%member(X, List1),
+%process(X, List2).
+process(Element,Tail1,List2).
+
+
+
+append_them(TempList, Result):-
+int(X),
+append(TempList, X, Result),
+retract(int(X)),
+fail.
+
+process(_, []).
+
+process(X, List1, [X|Tail], [X|List]):-
+%\+ int(X),
+%assert(int(X)),
+%process(X, Tail, List).
+intersect(
+
+process(X, [Head|Tail]):-
+X \== Head,
+process(X, Tail). 
+
+
+intersect([],[_],Result).
+intersect([Element|Tail],List2,IntersectList) :-
+member(Element,List2),
+\+(member(Element,IntersectList),
+intersect(Tail,List2,[Element|IntersectList]).
+
+
+
